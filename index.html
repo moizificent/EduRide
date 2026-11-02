@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EduRide</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3F8;--card:#fff;--ink:#12263A;--mut:#5d7084;--blue:#1F5FA8;--or:#F26B1D;--line:#d5dfea;--map:#dfe8f1;--road:#fff;--red:#d92d2d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1722;--card:#16263a;--ink:#e8eff6;--mut:#9fb2c6;--blue:#6aa5ec;--line:#27405a;--map:#1b2d42;--road:#2c4562}}
+:root[data-theme="dark"]{--bg:#0d1722;--card:#16263a;--ink:#e8eff6;--mut:#9fb2c6;--blue:#6aa5ec;--line:#27405a;--map:#1b2d42;--road:#2c4562}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;-webkit-text-size-adjust:100%}button,select,input{touch-action:manipulation}input,select{font-size:16px!important}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.45 "Plus Jakarta Sans",system-ui,sans-serif;min-height:100vh}
+#app{max-width:430px;margin:0 auto;min-height:100vh;padding:14px 14px 28px}
+h1{font-size:26px;line-height:1.15;margin:6px 0 4px;font-weight:800}
+h2{font-size:18px;margin:0 0 8px;font-weight:800}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--blue);font-size:18px;margin-bottom:6px}
+.brand i{width:26px;height:26px;border-radius:8px;background:var(--blue);display:grid;place-items:center;color:#fff;font-style:normal;font-size:14px}
+.mut{color:var(--mut);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px}
+label{display:block;font-weight:600;font-size:13px;margin:10px 0 4px}
+input[type=text],input[type=email],select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.btn{width:100%;border:0;border-radius:14px;padding:14px;font-weight:800;font-size:15px;font-family:inherit;background:var(--or);color:#fff;cursor:pointer;margin-top:12px}
+.btn.alt{background:var(--blue)}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}.btn.sm{width:auto;padding:9px 14px;margin:0;font-size:13px}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+.tabs{display:flex;gap:6px;margin-top:10px}
+.tab{flex:1;padding:10px 4px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font-weight:600;font-size:13px;font-family:inherit;cursor:pointer;text-align:center}
+.tab[aria-pressed=true]{border-color:var(--blue);background:var(--blue);color:#fff}
+.tab small{display:block;font-weight:400;opacity:.8;font-size:11px}
+.map{width:100%;border-radius:16px;background:var(--map);display:block;border:1px solid var(--line)}
+.fare{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.fare b{font-size:28px}
+.step{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:20px;cursor:pointer}
+.offer{display:flex;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.offer:first-of-type{border-top:0}
+.av{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.grow{flex:1;min-width:0}
+.price{font-weight:800;font-size:17px}
+.pill{display:inline-block;padding:3px 9px;border-radius:99px;background:var(--bg);border:1px solid var(--line);font-size:12px;font-weight:600}
+.pill.g{background:#e3f6ea;color:#16703a;border-color:#bfe6cd}
+.sos{background:var(--red);color:#fff;border:0;border-radius:14px;padding:16px;font-weight:800;font-size:16px;font-family:inherit;width:100%;cursor:pointer}
+.bar{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin:10px 0}.bar i{display:block;height:100%;width:0;background:var(--or)}
+.hide{display:none!important}
+.modal{position:fixed;inset:0;background:rgba(10,20,30,.55);display:grid;place-items:end center;padding:14px;z-index:20}
+.modal>div{background:var(--card);border-radius:20px;padding:18px;max-width:430px;width:100%}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;font-size:13px;z-index:30}
+.err{color:var(--red);font-size:13px;margin-top:6px;min-height:18px}
+.stars button{background:none;border:0;font-size:34px;cursor:pointer;color:var(--line)}.stars button.on{color:var(--or)}
+body.drv{--bg:#0f1a16;--card:#172721;--ink:#e9f3ee;--mut:#9bb5a8;--blue:#2fbf71;--or:#2fbf71;--line:#29433a;--map:#14251f;--road:#20382f}
+.pin{font-size:30px;font-weight:800;letter-spacing:6px}
+</style></head>
+<body><div id="app">
+<div class="row" style="margin-bottom:6px"><div class="brand" style="margin:0"><i>E</i><span id="brandT">EduRide</span></div><button class="btn ghost sm hide" id="sw" style="flex:none"></button></div>
+
+<section id="s-onb">
+<h1>Safe commutes start here.</h1><p class="mut">Complete your profile to join the campus community.</p>
+<div class="card">
+<label for="nm">Full name</label><input id="nm" type="text" autocomplete="name" placeholder="Ayesha Khan">
+<label for="em">University email</label><input id="em" type="email" autocomplete="email" placeholder="you@gift.edu.pk">
+<label for="idf">Student or employee ID card (front)</label><input id="idf" type="file" accept="image/*"><div class="mut" id="fn">JPG or PNG, up to 5 MB</div>
+<label>Register as</label>
+<div class="tabs"><button class="tab" data-role="Rider" aria-pressed="true">Rider</button><button class="tab" data-role="Driver" aria-pressed="false">Driver</button></div>
+<div class="err" id="oerr" role="alert"></div><button class="btn" id="verify">Verify profile</button></div></section>
+
+<section id="s-home" class="hide">
+<h2 id="hi">Where to?</h2>
+<div class="tabs" id="modes"><button class="tab" data-m="city" aria-pressed="true">In city</button><button class="tab" data-m="inter" aria-pressed="false">City to city</button></div>
+<div id="map1" style="margin-top:10px"></div>
+<div class="card">
+<div id="cityBox"><label for="dest">Destination</label><select id="dest"></select></div>
+<div id="interBox" class="hide"><div class="row"><div><label for="from">From</label><select id="from"></select></div><div><label for="to">To</label><select id="to"></select></div></div>
+<label for="when">Departure</label><select id="when"><option>Today, 4:00 PM</option><option>Today, 7:00 PM</option><option>Tomorrow, 8:00 AM</option><option>Tomorrow, 5:00 PM</option></select></div>
+<div class="tabs" id="types">
+<button class="tab" data-t="solo" aria-pressed="true">Solo<small>Private ride</small></button>
+<button class="tab" data-t="female" aria-pressed="false">Female-only<small>Women drivers</small></button>
+<button class="tab" data-t="share" aria-pressed="false">Share ride<small>Split the fare</small></button></div>
+<div id="shareBox" class="hide" style="margin-top:10px"><div class="row"><div><b>Seats you need</b><div class="mut" id="shareNote"></div></div>
+<div class="row" style="flex:none"><button class="step" id="sm" aria-label="Fewer seats">−</button><b id="seats" style="min-width:18px;text-align:center">1</b><button class="step" id="sp" aria-label="More seats">+</button></div></div></div>
+<label for="pay">Payment method</label><select id="pay"><option>Cash</option><option>JazzCash</option><option>Easypaisa</option><option>Debit/Credit card</option></select>
+<div class="fare"><div><div class="mut" id="fareLbl">Your offer</div><b id="fare">Rs. 0</b><div class="mut" id="fareSug"></div></div>
+<div class="row" style="flex:none"><button class="step" id="fm" aria-label="Lower offer">−</button><button class="step" id="fp" aria-label="Raise offer">+</button></div></div>
+<div class="err" id="herr" role="alert"></div><button class="btn" id="find">Find drivers</button></div></section>
+
+<section id="s-off" class="hide"><h2>Drivers are offering</h2><p class="mut" id="offSub">Waiting for offers…</p>
+<div class="card" id="offers" style="min-height:90px"></div><button class="btn ghost" id="offCancel">Cancel request</button></section>
+
+<section id="s-trk" class="hide"><h2 id="trkTitle"></h2><p class="mut" id="trkSub"></p><div id="map2"></div>
+<div class="card" id="drvCard"></div>
+<div class="card" id="pinCard"><div class="mut">Tell the driver this PIN to start</div><div class="pin" id="pin"></div></div>
+<div class="bar hide" id="bar"><i id="barI"></i></div><div id="coBox" class="card hide"></div>
+<div class="row" id="trkBtns" style="margin-top:12px"><button class="btn alt" id="call" style="margin:0">Call driver</button><button class="btn alt" id="msg" style="margin:0">Message</button></div>
+<button class="btn ghost" id="cancel">Cancel ride</button>
+<div id="safety" class="hide" style="margin-top:12px"><div class="row"><button class="sos" id="sos">SOS Emergency</button><button class="sos" id="shareTrip" style="background:var(--blue)">Share live trip</button></div></div></section>
+
+<section id="s-done" class="hide"><h1>You’ve arrived.</h1><p class="mut" id="doneSub"></p>
+<div class="card"><div class="mut">Rate your driver</div><div class="stars" id="stars"></div>
+<div class="row"><span>Total</span><b id="paid" style="text-align:right"></b></div><div class="mut" id="payNote"></div></div>
+<button class="btn" id="again">Book another ride</button></section>
+
+<!-- DRIVER -->
+<section id="s-dh" class="hide">
+<div class="card" style="margin-top:0"><div class="row"><div><h2 style="margin:0" id="dhi">Driver</h2><div class="mut" id="dst">You’re offline</div></div>
+<button class="btn sm" id="onl" style="flex:none">Go online</button></div></div>
+<div class="row" style="margin-top:12px"><div class="card" style="margin:0"><div class="mut">Today’s earnings</div><b style="font-size:24px" id="earn">Rs. 0</b></div><div class="card" style="margin:0"><div class="mut">Trips</div><b style="font-size:24px" id="trips">0</b></div></div>
+<h2 style="margin-top:16px">Ride requests</h2><div id="reqs"><div class="mut">Go online to receive requests.</div></div></section>
+
+<section id="s-dt" class="hide"><h2 id="dtT"></h2><p class="mut" id="dtS"></p><div id="map3"></div>
+<div class="card" id="dtCard"></div><div class="bar hide" id="dbar"><i id="dbarI"></i></div>
+<div id="dtAct"></div></section>
+</div>
+
+<script>
+window.onerror=function(m,u,l){var d=document.createElement('div');d.style.cssText='position:fixed;left:8px;right:8px;top:8px;background:#d92d2d;color:#fff;padding:10px;border-radius:10px;z-index:99;font:13px sans-serif';d.textContent='Error: '+m+' (line '+l+')';document.body.appendChild(d)};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const P={"Current location":[200,150],"GIFT University":[330,55],"Gujranwala Bus Stand":[70,65],"Chenab Chowk":[310,215],"Sheranwala Bagh":[85,210],"Model Town":[205,35]};
+const DEST=Object.keys(P).slice(1);
+const CITIES={Gujranwala:[32.16,74.19],Lahore:[31.52,74.36],Islamabad:[33.68,73.05],Rawalpindi:[33.6,73.04],Faisalabad:[31.42,73.08],Multan:[30.2,71.47],Sialkot:[32.49,74.53],Peshawar:[34.01,71.58],Gujrat:[32.57,74.08],Sargodha:[32.08,72.67]};
+const CN=Object.keys(CITIES);
+const proj=c=>{const[la,lo]=CITIES[c];return[20+(lo-70.5)/5*360,240-(la-29.8)/4.5*220]};
+const hav=(p,q)=>{const r=Math.PI/180,dLa=(q[0]-p[0])*r,dLo=(q[1]-p[1])*r,a=Math.sin(dLa/2)**2+Math.cos(p[0]*r)*Math.cos(q[0]*r)*Math.sin(dLo/2)**2;return 6371*2*Math.asin(Math.sqrt(a))};
+let S={user:null,mode:"city",from:"Gujranwala",to:"Lahore",dest:DEST[0],type:"solo",seats:1,fare:0,pay:"Cash",when:"Today, 4:00 PM",drv:null,t:null,paid:0,timers:[],raf:0,cancelFree:0,pin:"",earn:0,trips:0,online:false,reqs:[]};
+const save=()=>{try{localStorage.setItem("eduride_user",JSON.stringify(S.user))}catch(e){}};
+const load=()=>{try{return JSON.parse(localStorage.getItem("eduride_user"))}catch(e){return null}};
+const toast=t=>{const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)};
+function show(id){$$("section").forEach(s=>s.classList.toggle("hide",s.id!==id));scrollTo(0,0)}
+function clearT(){S.timers.forEach(x=>{clearTimeout(x);clearInterval(x)});S.timers=[];cancelAnimationFrame(S.raf)}
+const mk=(mode,from,to)=>{if(mode==="inter"){const km=Math.round(hav(CITIES[from],CITIES[to])*1.25);return{mode,a:proj(from),b:proj(to),km,label:from+" → "+to}}
+const a=P["Current location"],b=P[to];return{mode,a,b,km:Math.round(Math.hypot(a[0]-b[0],a[1]-b[1])/28*10)/10,label:to}};
+const myTrip=()=>mk(S.mode,S.from,S.mode==="inter"?S.to:S.dest);
+const fareFor=(t,type)=>{let f=t.mode==="inter"?120+t.km*26:60+t.km*38;if(type==="share")f*=.62;return Math.round(f/10)*10};
+const dur=t=>{const h=t.km/(t.mode==="inter"?70:25);return h>=1?Math.floor(h)+" h "+Math.round((h%1)*60)+" min":Math.max(5,Math.round(h*60))+" min"};
+
+function mapSVG(t,o={}){let g="";
+if(t.mode==="inter"){for(let x=20;x<=380;x+=72)g+=`<line x1="${x}" y1="10" x2="${x}" y2="250" stroke="var(--road)" stroke-width="2"/>`;
+for(let y=20;y<=240;y+=44)g+=`<line x1="10" y1="${y}" x2="390" y2="${y}" stroke="var(--road)" stroke-width="2"/>`;
+CN.forEach(c=>{const[x,y]=proj(c);g+=`<circle cx="${x}" cy="${y}" r="3.5" fill="var(--mut)"/><text x="${x+6}" y="${y+4}" font-size="10" fill="var(--mut)">${c}</text>`})}
+else{for(let x=20;x<400;x+=60)g+=`<line x1="${x}" y1="0" x2="${x+20}" y2="260" stroke="var(--road)" stroke-width="7"/>`;
+for(let y=30;y<260;y+=55)g+=`<line x1="0" y1="${y}" x2="400" y2="${y-8}" stroke="var(--road)" stroke-width="7"/>`;
+g+=`<text x="150" y="105" fill="var(--mut)" font-size="13" font-weight="700">Gujranwala</text>`}
+const[a,b]=[t.a,t.b];
+return`<svg class="map" viewBox="0 0 400 260" role="img" aria-label="Route map">${g}
+${o.route?`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="var(--blue)" stroke-width="4" stroke-dasharray="2 8" stroke-linecap="round"/>`:""}
+<circle cx="${a[0]}" cy="${a[1]}" r="8" fill="var(--blue)" stroke="#fff" stroke-width="3"/>
+<path transform="translate(${b[0]-9},${b[1]-26})" d="M9 0C4 0 0 4 0 9c0 7 9 17 9 17s9-10 9-17C18 4 14 0 9 0z" fill="#F26B1D"/><circle cx="${b[0]}" cy="${b[1]-17}" r="3.5" fill="#fff"/>
+${o.car?`<g id="car"><rect x="-12" y="-7" width="24" height="14" rx="5" fill="#12263A" stroke="#fff" stroke-width="2"/><rect x="-5" y="-4" width="10" height="8" rx="2" fill="#F26B1D"/></g>`:""}</svg>`}
+function moveCar(from,to,ms,prog,done){const t0=performance.now(),car=$("#car");
+(function f(t){const k=Math.min(1,(t-t0)/ms),x=from[0]+(to[0]-from[0])*k,y=from[1]+(to[1]-from[1])*k;
+car.setAttribute("transform",`translate(${x},${y}) rotate(${Math.atan2(to[1]-from[1],to[0]-from[0])*180/Math.PI})`);
+prog&&prog(k);if(k<1)S.raf=requestAnimationFrame(f);else done&&done()})(t0)}
+
+/* header / role */
+function chrome(){const d=S.user&&S.user.role==="Driver";document.body.classList.toggle("drv",!!d);$("#brandT").textContent=d?"EduRide Driver":"EduRide";
+const b=$("#sw");b.classList.toggle("hide",!S.user);b.textContent=d?"Rider view":"Driver view";}
+$("#sw").onclick=()=>{S.user.role=S.user.role==="Driver"?"Rider":"Driver";S.online=false;save();enter()};
+function enter(){clearT();chrome();S.user.role==="Driver"?dhome():home()}
+
+/* onboarding */
+let role="Rider";
+$$("[data-role]").forEach(b=>b.onclick=()=>{role=b.dataset.role;$$("[data-role]").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+$("#idf").onchange=e=>{$("#fn").textContent=e.target.files[0]?e.target.files[0].name:"JPG or PNG, up to 5 MB"};
+$("#verify").onclick=()=>{const n=$("#nm").value.trim(),m=$("#em").value.trim();
+if(n.length<3)return $("#oerr").textContent="Enter your full name.";
+if(!/^\S+@\S+\.\S+$/.test(m))return $("#oerr").textContent="Enter a valid university email.";
+if(!$("#idf").files[0])return $("#oerr").textContent="Upload the front of your ID card.";
+S.user={name:n,email:m,role};save();enter()};
+
+/* rider home */
+function home(){clearT();show("s-home");$("#hi").textContent="Hi "+S.user.name.split(" ")[0]+", where to?";refresh(true)}
+$("#dest").innerHTML=DEST.map(d=>`<option>${d}</option>`).join("");
+$("#from").innerHTML=$("#to").innerHTML=CN.map(c=>`<option>${c}</option>`).join("");$("#from").value="Gujranwala";$("#to").value="Lahore";
+$("#dest").onchange=e=>{S.dest=e.target.value;refresh(true)};$("#from").onchange=e=>{S.from=e.target.value;refresh(true)};$("#to").onchange=e=>{S.to=e.target.value;refresh(true)};
+$("#when").onchange=e=>S.when=e.target.value;$("#pay").onchange=e=>S.pay=e.target.value;
+$$("#modes .tab").forEach(b=>b.onclick=()=>{S.mode=b.dataset.m;$$("#modes .tab").forEach(x=>x.setAttribute("aria-pressed",x===b));refresh(true)});
+$$("#types .tab").forEach(b=>b.onclick=()=>{S.type=b.dataset.t;$$("#types .tab").forEach(x=>x.setAttribute("aria-pressed",x===b));refresh(true)});
+$("#sm").onclick=()=>{S.seats=Math.max(1,S.seats-1);refresh()};$("#sp").onclick=()=>{S.seats=Math.min(3,S.seats+1);refresh()};
+$("#fm").onclick=()=>{S.fare=Math.max(40,S.fare-(S.mode==="inter"?50:10));refresh()};$("#fp").onclick=()=>{S.fare+=S.mode==="inter"?50:10;refresh()};
+function refresh(reset){const t=myTrip(),sh=S.type==="share";if(reset)S.fare=fareFor(t,S.type);
+$("#cityBox").classList.toggle("hide",S.mode==="inter");$("#interBox").classList.toggle("hide",S.mode!=="inter");
+$("#map1").innerHTML=mapSVG(t,{route:1});$("#shareBox").classList.toggle("hide",!sh);$("#seats").textContent=S.seats;
+$("#shareNote").textContent=S.mode==="inter"?"Shared with other passengers going your way · about 38% cheaper":"2 students on your route · about 38% cheaper";
+$("#fareLbl").textContent=sh?"Your offer per seat":"Your offer";$("#fare").textContent="Rs. "+S.fare;
+$("#fareSug").textContent=`${t.km} km · about ${dur(t)} · suggested Rs. ${fareFor(t,S.type)}`+(sh&&S.seats>1?` · total Rs. ${S.fare*S.seats}`:"");$("#herr").textContent=""}
+
+/* offers */
+const MALE=[["Usman R.","Suzuki Alto","LEA 4821",4.8],["Bilal A.","Toyota Vitz","GRW 1190",4.9],["Hamza S.","Suzuki Cultus","LWH 7733",4.7]];
+const FEM=[["Sana M.","Suzuki Alto","LEB 2210",4.9],["Hira K.","Toyota Passo","GRW 5504",5.0],["Maryam T.","Honda City","LXZ 318",4.8]];
+$("#find").onclick=()=>{if(S.mode==="inter"&&S.from===S.to)return $("#herr").textContent="Choose two different cities.";
+clearT();show("s-off");const list=S.type==="female"?FEM:MALE,inter=S.mode==="inter";$("#offers").innerHTML="";$("#offSub").textContent="Waiting for offers…";let n=0;
+list.forEach((d,i)=>S.timers.push(setTimeout(()=>{const price=Math.round((S.fare+[0,inter?50:10,inter?100:20][i])/10)*10,eta=2+i*2+(Math.random()*2|0);
+const el=document.createElement("div");el.className="offer";
+el.innerHTML=`<div class="av">${d[0][0]}</div><div class="grow"><b>${d[0]}</b> <span class="pill">★ ${d[3]}</span><div class="mut">${d[1]} · ${d[2]} · ${eta} min away</div></div><div style="text-align:right"><div class="price">Rs. ${price}</div><button class="btn sm">Accept</button></div>`;
+el.querySelector("button").onclick=()=>accept(d,price,eta);$("#offers").appendChild(el);n++;$("#offSub").textContent=n+" driver"+(n>1?"s":"")+" offering · pick the one you like"},900+i*1100)))};
+$("#offCancel").onclick=home;
+
+/* rider tracking */
+function accept(d,price,eta){clearT();S.drv=d;S.t=myTrip();const t=S.t;S.paid=price*(S.type==="share"?S.seats:1);S.cancelFree=Date.now()+120000;
+show("s-trk");$("#map2").innerHTML=mapSVG(t,{car:1});$("#safety").classList.add("hide");$("#bar").classList.add("hide");$("#coBox").classList.add("hide");
+["#pinCard","#trkBtns","#cancel"].forEach(x=>$(x).classList.remove("hide"));S.pin=""+(1000+(Math.random()*9000|0));$("#pin").textContent=S.pin;
+$("#drvCard").innerHTML=`<div class="row"><div class="av" style="flex:none">${d[0][0]}</div><div class="grow"><b>${d[0]}</b> <span class="pill g">Verified</span><div class="mut">${d[1]} · ${d[2]}</div></div><div style="text-align:right;flex:none"><div class="price">Rs. ${S.paid}</div><div class="mut">${S.pay}</div></div></div>`+(S.mode==="inter"?`<div class="mut" style="margin-top:8px">${t.label} · ${S.when}</div>`:"");
+$("#trkTitle").textContent="Ride confirmed";const a=t.a;
+moveCar([a[0]-90,a[1]+60],a,eta*1500,k=>{$("#trkSub").textContent="Arriving in "+Math.max(1,Math.ceil(eta*(1-k)))+" min"},()=>{
+$("#trkTitle").textContent="Your driver has arrived";$("#trkSub").textContent="Share the PIN, then the ride starts.";S.timers.push(setTimeout(startRide,3000))})}
+function startRide(){const t=S.t;$("#trkTitle").textContent="On the way to "+(t.mode==="inter"?S.to:S.dest);
+$("#trkSub").textContent=t.km+" km · about "+dur(t)+" · "+(S.type==="female"?"Female-only":S.type==="share"?"Shared ride":"Private ride");
+["#pinCard","#trkBtns","#cancel"].forEach(x=>$(x).classList.add("hide"));$("#safety").classList.remove("hide");$("#map2").innerHTML=mapSVG(t,{car:1,route:1});$("#bar").classList.remove("hide");
+if(S.type==="share"){$("#coBox").classList.remove("hide");$("#coBox").innerHTML=`<b>Riding with</b><div class="mut">Areeba (same campus) · same route<br>Fare split automatically</div>`}
+moveCar(t.a,t.b,14000,k=>{$("#barI").style.width=k*100+"%"},()=>{
+$("#doneSub").textContent="Dropped at "+(t.mode==="inter"?S.to:S.dest)+" with "+S.drv[0];$("#paid").textContent="Rs. "+S.paid;
+$("#payNote").textContent=S.pay==="Cash"?"Pay the driver Rs. "+S.paid+" in cash.":"Paid with "+S.pay+" (demo payment).";stars(0);show("s-done")})}
+$("#call").onclick=()=>toast("Calling "+S.drv[0]+" (demo)");$("#msg").onclick=()=>toast("Message sent: “I’m at the pickup point”");
+function modal(h){const m=document.createElement("div");m.className="modal";m.innerHTML="<div>"+h+"</div>";document.body.appendChild(m);return m}
+$("#cancel").onclick=()=>{const free=Date.now()<S.cancelFree;const m=modal(`<h2>Cancel this ride?</h2><p class="mut">${free?"Cancellation is free within 2 minutes of confirming.":"A Rs. 50 fee applies because your driver is already on the way."}</p><button class="btn ghost" id="keep">Keep ride</button><button class="btn" id="yes" style="background:var(--red)">Yes, cancel</button>`);
+m.querySelector("#keep").onclick=()=>m.remove();m.querySelector("#yes").onclick=()=>{m.remove();toast(free?"Ride cancelled":"Ride cancelled · Rs. 50 fee");home()}};
+$("#sos").onclick=()=>{const m=modal(`<h2>Emergency help</h2><p class="mut">Your live location is shared with your emergency contacts.</p><button class="sos" id="c15">Call Police 15</button><button class="btn alt" id="c1122">Call Rescue 1122</button><button class="btn ghost" id="ok">I’m safe, close</button>`);
+m.querySelector("#c15").onclick=()=>toast("Dialing 15 (demo)");m.querySelector("#c1122").onclick=()=>toast("Dialing 1122 (demo)");m.querySelector("#ok").onclick=()=>m.remove()};
+$("#shareTrip").onclick=async()=>{const x=`I’m riding ${S.t.label} with ${S.drv[0]} (${S.drv[2]}).`;try{await navigator.share({title:"My EduRide trip",text:x})}catch(e){try{await navigator.clipboard.writeText(x);toast("Trip details copied")}catch(_){toast("Trip shared with contacts (demo)")}}};
+function stars(n){$("#stars").innerHTML=[1,2,3,4,5].map(i=>`<button class="${i<=n?"on":""}" aria-label="${i} stars">★</button>`).join("");$$("#stars button").forEach((b,i)=>b.onclick=()=>stars(i+1))}
+$("#again").onclick=home;
+
+/* DRIVER */
+const RN=["Ayesha K.","Zain A.","Fatima R.","Hassan M.","Noor S.","Ali H."],PAYS=["Cash","JazzCash","Easypaisa","Debit/Credit card"];
+function dhome(){clearT();show("s-dh");S.reqs=[];$("#dhi").textContent="Hi "+S.user.name.split(" ")[0];drender()}
+function drender(){$("#earn").textContent="Rs. "+S.earn;$("#trips").textContent=S.trips;$("#onl").textContent=S.online?"Go offline":"Go online";$("#dst").textContent=S.online?"Online · looking for requests":"You’re offline";
+const box=$("#reqs");if(!S.online){box.innerHTML='<div class="mut">Go online to receive requests.</div>';return}
+if(!S.reqs.length){box.innerHTML='<div class="mut">Looking for riders near you…</div>';return}
+box.innerHTML="";S.reqs.forEach((r,i)=>{const el=document.createElement("div");el.className="card";
+el.innerHTML=`<div class="row"><div class="grow"><b>${r.rider}</b> <span class="pill">${r.type==="share"?"Share · "+r.seats+" seat"+(r.seats>1?"s":""):r.type==="female"?"Female-only":"Solo"}</span><div class="mut">${r.t.label} · ${r.t.km} km${r.t.mode==="inter"?" · "+r.when:""}</div><div class="mut">Pays by ${r.pay}</div></div><div class="price" style="flex:none">Rs. ${r.fare}</div></div>
+<div class="row" style="margin-top:10px"><button class="btn sm" data-a="acc">Accept Rs. ${r.fare}</button><button class="btn sm alt" data-a="ctr">Counter +${r.t.mode==="inter"?100:20}</button><button class="btn sm ghost" data-a="no">Decline</button></div>`;
+el.querySelector('[data-a=acc]').onclick=()=>dtrip(r,r.fare);
+el.querySelector('[data-a=ctr]').onclick=e=>{r.fare+=r.t.mode==="inter"?100:20;toast("Counter offer sent · rider accepted");dtrip(r,r.fare)};
+el.querySelector('[data-a=no]').onclick=()=>{S.reqs.splice(i,1);drender()};box.appendChild(el)})}
+function newReq(){const inter=Math.random()<.4;let t,when="";
+if(inter){const a=CN[Math.random()*CN.length|0];let b;do{b=CN[Math.random()*CN.length|0]}while(b===a);t=mk("inter",a,b);when=["Today, 4:00 PM","Tomorrow, 8:00 AM"][Math.random()*2|0]}else t=mk("city","Current location",DEST[Math.random()*DEST.length|0]);
+const type=["solo","share","female","solo"][Math.random()*4|0],seats=type==="share"?1+(Math.random()*2|0):1;
+return{rider:RN[Math.random()*RN.length|0],t,type,seats,when,pay:PAYS[Math.random()*4|0],fare:fareFor(t,type)*seats}}
+$("#onl").onclick=()=>{S.online=!S.online;clearT();S.reqs=[];if(S.online){S.timers.push(setInterval(()=>{if(S.reqs.length<4){S.reqs.push(newReq());drender()}},3500))}drender()};
+function dtrip(r,fare){clearT();S.online=false;show("s-dt");const t=r.t;$("#map3").innerHTML=mapSVG(t,{car:1});$("#dbar").classList.add("hide");
+$("#dtCard").innerHTML=`<div class="row"><div class="grow"><b>${r.rider}</b><div class="mut">${t.label} · ${t.km} km · ${r.pay}</div></div><div class="price" style="flex:none">Rs. ${fare}</div></div>`;
+$("#dtT").textContent="Heading to pickup";$("#dtS").textContent="Follow the route to "+r.rider;$("#dtAct").innerHTML="";
+const a=t.a;moveCar([a[0]-100,a[1]+60],a,5000,null,()=>{$("#dtT").textContent="You’ve arrived";$("#dtS").textContent="Ask the rider for their 4-digit PIN. Demo PIN: 1234";
+$("#dtAct").innerHTML=`<label for="pn">Rider PIN</label><input id="pn" type="text" inputmode="numeric" maxlength="4" placeholder="1234"><div class="err" id="perr" role="alert"></div><button class="btn" id="go">Start ride</button>`;
+$("#go").onclick=()=>{if($("#pn").value!=="1234")return $("#perr").textContent="Wrong PIN. Ask the rider again.";
+$("#dtT").textContent="Ride in progress";$("#dtS").textContent=`Drop ${r.rider} at ${t.mode==="inter"?t.label.split(" → ")[1]:t.label}`;$("#dtAct").innerHTML="";$("#map3").innerHTML=mapSVG(t,{car:1,route:1});$("#dbar").classList.remove("hide");
+moveCar(t.a,t.b,12000,k=>{$("#dbarI").style.width=k*100+"%"},()=>{const net=Math.round(fare*.9);S.earn+=net;S.trips++;
+$("#dtT").textContent="Ride complete";$("#dtS").textContent=r.pay==="Cash"?`Collect Rs. ${fare} in cash. You keep Rs. ${net} after the 10% fee.`:`Rs. ${fare} paid via ${r.pay}. Rs. ${net} added to your balance.`;
+$("#dtAct").innerHTML=`<button class="btn" id="back">Back to requests</button>`;$("#back").onclick=dhome})}})}
+
+S.user=load();if(S.user)enter();
+</script></body></html>
